@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
-from contrast_Decoder import Con_Transfromer
-from self_sl import ssm
+from .contrast_Decoder import Con_Transfromer
+from .self_sl import ssm
 
 class Model(nn.Module):
     def __init__(self, Nh=224, Nw=224, bs=32, ptsz = 32, pout = 512, num_tokens=169, dim_in=512,  dim=512, heads = 8, dim_head = 64, dropout = 0.):

@@ -40,12 +40,12 @@ class ssm(nn.Module):
         x = self.base_encoder(x)
         # print(x.shape)
         x_out = x.view((self.bs, -1, self.cntH, self.cntW))
-
+        print(x_out.shape)
         # print(x.shape)
         #x = self.proj1(x)
         # print(x.shape)
         x = self.gap(x_out).squeeze()
-
+        print(x.shape)
         x1 = self.proj1(x)
         # print(x.shape)
         x2 = self.proj2(x)
@@ -53,8 +53,8 @@ class ssm(nn.Module):
         return x1, x2, x_out
     
 if __name__ == '__main__':
-    model = ssm(Nh=224,Nw=224,bs=2)
-    x = torch.randn((2,169,3,32, 32))
+    model = ssm(Nh=224,Nw=224,bs=16)
+    x = torch.randn((16,169,3,32, 32))
     a, b, c = model(x)
     print(a.shape)
     print(b.shape)
