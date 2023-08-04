@@ -7,12 +7,13 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-def loss_batch(model, loss_func, xb, yb, opt=None, metric=None):
+def loss_batch(model, loss_func, x1, x2, opt=None, metric=None):
     # Generate predictions
-    preds,_ = model(xb)
+    y1,_ = model(x1)
+    y2,_ = model(x2)
     # Calculate loss
     # print(max(yb))
-    loss = loss_func(preds, yb)
+    loss = loss_func(y1, y2)
 
     if opt is not None:
         # Compute gradients
@@ -24,21 +25,22 @@ def loss_batch(model, loss_func, xb, yb, opt=None, metric=None):
     metric_result = None
     if metric is not None:
         # Compute the metric
-        metric_result = metric(preds, yb)
-    return loss.item(), len(xb), metric_result
+        metric_result = metric(y1, y2)
+    return loss.item(), len(x1), metric_result
 
 
 def evaluate(model, loss_func, valid_dl, metric=None):
     with torch.no_grad():
         # Pass each batch through the model
-        results = [loss_batch(model, loss_func, xb, yb, metric=metric)
-                   for xb, yb in valid_dl]
+        results = [loss_batch(model, loss_func, x1, x2, metric=metric)
+                   for x1, x2 in valid_dl]
         # Separate losses, counts and metrics
         losses, nums, metrics = zip(*results)
         # Total size of the data set
         total = np.sum(nums)
         # Avg, loss across batches
         avg_loss = np.sum(np.multiply(losses, nums)) / total
+        avg_metric = 0
         if metric is not None:
             # Avg of metric across batches
             avg_metric = np.sum(np.multiply(metrics, nums)) / total
@@ -62,8 +64,8 @@ def train_pretext(epochs, model, loss_func, train_dl, valid_dl, opt_fn=None, lr=
     for epoch in range(epochs):
         # Training
         model.train()
-        for xb, yb in tqdm(train_dl):
-            train_loss,_,_ = loss_batch(model, loss_func, xb, yb, opt)
+        for x1, x2 in tqdm(train_dl):
+            train_loss,_,_ = loss_batch(model, loss_func, x1, x2, opt)
 
         # Evaluation
         model.eval()

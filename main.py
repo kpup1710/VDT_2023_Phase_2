@@ -78,7 +78,7 @@ def downstream(args, dataset, model):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    args = parser.parse_args()
+    
     parser.add_argument('--data_name', type=str, default='cedar')
     parser.add_argument('--path', type=str, default= "C:\\Users\\RedmiBook\\HUST\\Documents\\Studying\\Phase_2_VDT\\code\\Project_code\\")
     parser.add_argument('--device', type=str, default='cuda')
@@ -92,11 +92,11 @@ if __name__ == "__main__":
     parser.add_argument('--ds_bs', type=int, default=16)
     parser.add_argument('--ds_lr', type=float, default=1e-3)
     parser.add_argument('--ds_eps', type=int, default=20)
-
+    args = parser.parse_args()
     FORMAT = '%(asctime)s %(message)s'
     logging.basicConfig(format=FORMAT)
     d = {'clientip': '192.168.0.1', 'user': 'fbloggs'}
 #   logging.basicConfig()
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
-    pretext(args)
+    process(args)

@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import numpy as np
-from Transformers import *
+from .Transformers import *
 
 class Con_Transfromer(nn.Module):
     def __init__(self, num_tokens=169, dim_in=512,  dim=512, heads = 8, dim_head = 64, dropout = 0.) -> None:

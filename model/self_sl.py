@@ -36,29 +36,31 @@ class ssm(nn.Module):
         self.cntW = self.Nw//(self.ptsz//2) - 1
     
     def forward(self, x):
+        if x.shape[0] != self.bs:
+            self.bs = x.shape[0]
         x = x.view((-1,3,self.ptsz,self.ptsz))
         x = self.base_encoder(x)
         # print(x.shape)
         x_out = x.view((self.bs, -1, self.cntH, self.cntW))
-        print(x_out.shape)
+        # print(x_out.shape)
         # print(x.shape)
         #x = self.proj1(x)
         # print(x.shape)
         x = self.gap(x_out).squeeze()
-        print(x.shape)
-        x1 = self.proj1(x)
         # print(x.shape)
-        x2 = self.proj2(x)
+        # x1 = self.proj1(x)
+        # print(x.shape)
+        x1 = self.proj2(x)
         
-        return x1, x2, x_out
+        return x1, x_out
     
 if __name__ == '__main__':
     model = ssm(Nh=224,Nw=224,bs=16)
     x = torch.randn((16,169,3,32, 32))
-    a, b, c = model(x)
+    a, b = model(x)
     print(a.shape)
     print(b.shape)
-    print(c.shape)
+
     # x = np.random.randn(224,224,3)
     # y = model.__getpatches__(x)
     # print(y.shape)
