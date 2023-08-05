@@ -18,8 +18,8 @@ rand_seed = 42
 def process(args):
     path = args.path
     data_name = args.data_name
-    data_path = path + f'data\\{data_name}\\'
-    data_df = pd.read_csv(path + f'data\\{data_name}.csv')
+    data_path = path + f'data/{data_name}/'
+    data_df = pd.read_csv(path + f'data/{data_name}.csv')
     device = args.device
     gpu_id = args.gpu_id
 
@@ -49,7 +49,7 @@ def pretext(args, dataset, model):
 
     # Validation set and data loader
     val_sampler = SubsetRandomSampler(val_indices)
-    val_dl = DataLoader(datassl, batch_size, sampler=val_sampler)
+    val_dl = DataLoader(dataset, batch_size, sampler=val_sampler)
 
     train_dl = DeviceDataLoader(train_dl, args.device)
     val_dl = DeviceDataLoader(val_dl, args.device)

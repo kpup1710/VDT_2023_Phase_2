@@ -193,7 +193,7 @@ class DatasetDownstream(Dataset):
         return crop_rgb
 
     def __getitem__(self, idx):
-        img_path = os.path.join(self.data_path, self.df.iloc[idx]['filepath'])
+        img_path = os.path.join(self.data_path, self.df.iloc[idx]['filepath']).replace('\\', '/')
         pic = cv.imread(img_path)
         #pic = 1 - pic #np.transpose(pic, (2,0,1))
         x = resize(pic, (256,256), preserve_range = True)

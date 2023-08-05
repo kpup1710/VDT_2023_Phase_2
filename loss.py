@@ -31,6 +31,8 @@ class  CorLoss(nn.Module):
         return x.flatten()[:-1].view(n - 1, n + 1)[:, 1:].flatten()
 
     def forward(self, z1, z2):
+        if z1.shape[0] != self.batch_size:
+            self.batch_size = z1.shape[0]
         N = 2 * self.batch_size
         z1 = F.normalize(z1, dim=0, p=2)
         #z1 = z1 - z1.mean(dim = 0)
