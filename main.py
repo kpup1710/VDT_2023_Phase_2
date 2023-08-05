@@ -10,6 +10,7 @@ from model.model import *
 from loss import *
 from utils import *
 from train_pretext import *
+from optimizer import *
 import logging
 import json
 
@@ -55,7 +56,14 @@ def pretext(args, dataset, model):
     val_dl = DeviceDataLoader(val_dl, args.device)
 
     loss_func = CorLoss(batch_size=batch_size)
-    opt = torch.optim.Adam
+
+    params, param_names = [], []
+    for name, param in model.named_parameters():
+        params.append(param)
+        param_names.append(name)
+    parameters = [{'params' : params, 'param_names' : param_names}]
+    
+    opt = LARS(parameters, lr = 0.1, weight_decay = 0.9, exclude_from_weight_decay=["batch_normalization", "bias"])
     lr = args.pre_lr
     epochs = args.pre_eps
 
