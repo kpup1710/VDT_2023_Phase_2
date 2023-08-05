@@ -57,13 +57,9 @@ def pretext(args, dataset, model):
 
     loss_func = CorLoss(batch_size=batch_size)
 
-    params, param_names = [], []
-    for name, param in model.named_parameters():
-        params.append(param)
-        param_names.append(name)
-    parameters = [{'params' : params, 'param_names' : param_names}]
+
     
-    opt = LARS(parameters, lr = 0.1, weight_decay = 0.9, exclude_from_weight_decay=["batch_normalization", "bias"])
+    opt = LARS
     lr = args.pre_lr
     epochs = args.pre_eps
 
