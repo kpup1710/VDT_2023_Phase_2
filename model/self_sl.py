@@ -15,7 +15,7 @@ class ssm(nn.Module):
         self.bs = bs
         self.ptsz = ptsz
         self.pout = pout
-        self.base_encoder = torchvision.models.resnet18(pretrained=False)
+        self.base_encoder = torchvision.models.resnet18(weights=None)
         self.base_encoder.fc = nn.Identity()
 
         self.proj1 = nn.Sequential(*[nn.Linear(512, 512),
