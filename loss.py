@@ -57,7 +57,18 @@ class SparsityLoss(nn.Module):
         # print(loss.shape)
         loss /= self.batch_size
         return loss
+class SSLLoss(nn.Module):
+    def __init__(self) -> None:
+        super().__init__()
+        self.sm = nn.Softmax(dim=-1)
     
+    def forward(self, x1, x2):
+        q1 = self.sm(x1)
+        q2 = self.sm(x2)
+        loss = -torch.sum(q2*torch.log(q1) + q1*torch.log(q2)) / x1.shape[0]
+        return loss
+
+
 class NewFocalLoss(nn.Module):
     def __init__(self, alpha1=0.6, alpha2=0.8, m=0.9, n=0.3, K=10, V=10):
         super().__init__()
@@ -78,9 +89,9 @@ class NewFocalLoss(nn.Module):
 
 
 if __name__ == '__main__':
-    x ,y = 1.1*torch.ones((512, 128)), torch.ones((512, 128))
+    x ,y = 1.1*torch.randn((512, 128)),2*torch.randn((512, 128)) + 1
     lb = torch.zeros((512))
-    loss = SparsityLoss()
+    loss = SSLLoss()
     focalloss = NewFocalLoss()
-    l = focalloss(x, y, lb)
+    l = loss(x, y)
     print(l)
