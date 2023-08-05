@@ -92,7 +92,7 @@ class DatasetSSL(Dataset):
 
     def __getitem__(self, idx):
         #writer = self.df['writer'].iloc[idx]
-        img_path = os.path.join(self.data_path, self.df.iloc[idx]['filepath'])
+        img_path = os.path.join(self.data_path, self.df.iloc[idx]['filepath']).replace('\\', '/')
         # print(img_path)
         orgpic = cv.imread(img_path)
         orgpic = orgpic/255.0
