@@ -20,7 +20,7 @@ class DatasetSSL(Dataset):
         self.data_path = data_path
         self.transformations = transforms.Compose([transforms.RandomApply([transforms.ColorJitter(0.25, 0.25, 0.2, 0.2)],p = 0.5),
                                                    transforms.RandomApply([transforms.RandomAffine(5, (0.1,0.1), (1.0,1.25))], p=0.2),
-                                                   transforms.RandomResizedCrop(224, scale = (0.9,1.0)),
+                                                #    transforms.RandomResizedCrop(224, scale = (0.9,1.0)),
                                                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
                                                    ])
         self.df = df
@@ -87,7 +87,7 @@ class DatasetSSL(Dataset):
         return crop_rgb
 
     def __augment__(self,x):
-        x1 = 255 - x
+        x1 = 1 - x
         return x, x1
 
     def __getitem__(self, idx):

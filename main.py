@@ -46,7 +46,7 @@ def pretext(args, dataset, model):
     batch_size = args.pre_bs
     # Training sampler and data loader
     train_sampler = SubsetRandomSampler(train_indices)
-    train_dl = DataLoader(dataset, batch_size, sampler=train_sampler)
+    train_dl = DataLoader(dataset, batch_size, sampler=train_sampler, num_workers=2)
 
     # Validation set and data loader
     val_sampler = SubsetRandomSampler(val_indices)

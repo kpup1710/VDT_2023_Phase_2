@@ -67,7 +67,7 @@ def train_pretext(epochs, model, loss_func, train_dl, valid_dl, opt_fn=None, lr=
 
     parameters = [{'params' : params, 'param_names' : param_names}]
     opt = opt_fn(parameters, lr = lr)
-    sched = LinearWarmupCosineAnnealingLR(opt, 10, epochs)
+    # sched = LinearWarmupCosineAnnealingLR(opt, 10, epochs)
     max_val_acc = 0
     for epoch in range(epochs):
         # Training
@@ -81,7 +81,7 @@ def train_pretext(epochs, model, loss_func, train_dl, valid_dl, opt_fn=None, lr=
         val_loss, total, val_metric = result
         if max_val_acc < val_metric:
           torch.save(model.state_dict(), PATH+'best_predictor.pth')
-        sched.step(val_loss)
+        opt.step(val_loss)
         # Record the loss and metric
         train_losses.append(train_loss)
         val_losses.append(val_loss)
