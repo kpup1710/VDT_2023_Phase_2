@@ -58,7 +58,14 @@ def train_pretext(epochs, model, loss_func, train_dl, valid_dl, opt_fn=None, lr=
     # Instantiate the optimizer
     if opt_fn is None:
         opt_fn = torch.optim.SGD
-    opt = opt_fn(model.parameters(), lr=lr,weight_decay=1e-4)
+
+    params, param_names = [], []
+    for name, param in model.named_parameters():
+        params.append(param)
+        param_names.append(name)
+        
+    parameters = [{'params' : params, 'param_names' : param_names}]
+    opt = opt_fn(parameters, lr = 0.1, weight_decay = 0.9, exclude_from_weight_decay=["batch_normalization", "bias"])
     sched = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer=opt, mode='min', patience= 8, min_lr =1e-4, verbose=True)
     max_val_acc = 0
     for epoch in range(epochs):
