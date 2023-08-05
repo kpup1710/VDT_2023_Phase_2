@@ -66,7 +66,7 @@ def train_pretext(epochs, model, loss_func, train_dl, valid_dl, opt_fn=None, lr=
         param_names.append(name)
 
     parameters = [{'params' : params, 'param_names' : param_names}]
-    opt = opt_fn(parameters, lr = lr, weight_decay = 0.9, exclude_from_weight_decay=["batch_normalization", "bias"])
+    opt = opt_fn(parameters, lr = lr)
     sched = LinearWarmupCosineAnnealingLR(opt, 10, epochs)
     max_val_acc = 0
     for epoch in range(epochs):

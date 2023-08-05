@@ -58,7 +58,8 @@ def pretext(args, dataset, model):
     # loss_func = CorLoss(batch_size=batch_size)
     loss_func = SSLLoss()
 
-    opt = LARS
+    # opt = LARS
+    opt = torch.optim.Adam
     lr = args.pre_lr
     epochs = args.pre_eps
 
