@@ -55,11 +55,11 @@ def pretext(args, dataset, model):
     train_dl = DeviceDataLoader(train_dl, args.device)
     val_dl = DeviceDataLoader(val_dl, args.device)
 
-    # loss_func = CorLoss(batch_size=batch_size)
-    loss_func = SSLLoss()
+    loss_func = CorLoss(batch_size=batch_size)
+    # loss_func = SSLLoss()
 
-    # opt = LARS
-    opt = torch.optim.Adam
+    opt = LARS
+    # opt = torch.optim.Adam
     lr = args.pre_lr
     epochs = args.pre_eps
 
