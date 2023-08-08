@@ -2,6 +2,7 @@ import torch
 from tqdm import tqdm
 import numpy as np
 from optimizer import *
+import os
 
 import logging
 
@@ -55,7 +56,7 @@ def accuracy(outputs, labels):
 
 def train_pretext(epochs, model, loss_func, train_dl, valid_dl, opt_fn=None, lr=None, metric=None, expt_name='cedar', PATH=''):
     train_losses, val_losses, val_metrics = [], [], []
-    torch.cuda.empty_cache()
+    torch.cuda.empty_cache()    
     # Instantiate the optimizer
     if opt_fn is None:
         opt_fn = torch.optim.SGD
@@ -80,11 +81,13 @@ def train_pretext(epochs, model, loss_func, train_dl, valid_dl, opt_fn=None, lr=
         result = evaluate(model, loss_func=loss_func, valid_dl=valid_dl, metric=metric)
         val_loss, total, val_metric = result
         if max_val_acc < val_metric:
+            print("saving model")
             torch.save({'model_state_dict' : model.state_dict(),
                 'optim_state_dict' : opt.state_dict(),
                 'scheduler_state_dict' : sched.state_dict(),
                 'epochs' : epoch+1},
-                f'/content/outputs/model_{expt_name}.pt')
+                PATH+ f'/model_{expt_name}.pt')
+            print("saved model")
         sched.step(val_loss)
         # Record the loss and metric
         train_losses.append(train_loss)
