@@ -63,7 +63,7 @@ def pretext(args, dataset, model):
     lr = args.pre_lr
     epochs = args.pre_eps
 
-    train_losses, val_losses, _ = train_pretext(epochs, model, loss_func, train_dl, val_dl, opt_fn=opt, lr=lr, metric=None, PATH=args.path)
+    train_losses, val_losses, _ = train_pretext(epochs, model, loss_func, train_dl, val_dl, opt_fn=opt, lr=lr, metric=None, expt_name=args.expt_name, PATH=args.path)
 
 
 
@@ -96,6 +96,8 @@ if __name__ == "__main__":
     parser.add_argument('--ds_bs', type=int, default=16)
     parser.add_argument('--ds_lr', type=float, default=1e-3)
     parser.add_argument('--ds_eps', type=int, default=20)
+
+    parser.add_argument('--expt_name', type=str, default='cedar')
     args = parser.parse_args()
     FORMAT = '%(asctime)s %(message)s'
     logging.basicConfig(format=FORMAT)

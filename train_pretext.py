@@ -53,7 +53,7 @@ def accuracy(outputs, labels):
     return torch.tensor(torch.sum(preds == labels).item() / len(preds))
 
 
-def train_pretext(epochs, model, loss_func, train_dl, valid_dl, opt_fn=None, lr=None, metric=None, PATH=''):
+def train_pretext(epochs, model, loss_func, train_dl, valid_dl, opt_fn=None, lr=None, metric=None, expt_name='cedar', PATH=''):
     train_losses, val_losses, val_metrics = [], [], []
     torch.cuda.empty_cache()
     # Instantiate the optimizer
@@ -67,7 +67,7 @@ def train_pretext(epochs, model, loss_func, train_dl, valid_dl, opt_fn=None, lr=
 
     parameters = [{'params' : params, 'param_names' : param_names}]
     opt = opt_fn(parameters, lr = lr)
-    # sched = LinearWarmupCosineAnnealingLR(opt, 10, epochs)
+    sched = LinearWarmupCosineAnnealingLR(opt, 10)
     max_val_acc = 0
     for epoch in range(epochs):
         # Training
@@ -80,8 +80,12 @@ def train_pretext(epochs, model, loss_func, train_dl, valid_dl, opt_fn=None, lr=
         result = evaluate(model, loss_func=loss_func, valid_dl=valid_dl, metric=metric)
         val_loss, total, val_metric = result
         if max_val_acc < val_metric:
-          torch.save(model.state_dict(), PATH+'best_predictor.pth')
-        opt.step(val_loss)
+            torch.save({'model_state_dict' : model.state_dict(),
+                'optim_state_dict' : opt.state_dict(),
+                'scheduler_state_dict' : sched.state_dict(),
+                'epochs' : epoch+1},
+                f'/content/outputs/model_{expt_name}.pt')
+        sched.step(val_loss)
         # Record the loss and metric
         train_losses.append(train_loss)
         val_losses.append(val_loss)

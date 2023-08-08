@@ -63,9 +63,10 @@ class SSLLoss(nn.Module):
         self.sm = nn.Softmax(dim=-1)
     
     def forward(self, x1, x2):
-        q1 = self.sm(x1)
-        q2 = self.sm(x2)
-        loss = -torch.sum(q2*torch.log(q1) + q1*torch.log(q2)) / x1.shape[0]
+        # q1 = self.sm(x1)
+        # q2 = self.sm(x2)
+        # loss = -torch.sum(q2*torch.log(q1) + q1*torch.log(q2)) / x1.shape[0]
+        loss = torch.mean(torch.norm(x1- x2), dim=-1)
         return loss
 
 
@@ -89,7 +90,7 @@ class NewFocalLoss(nn.Module):
 
 
 if __name__ == '__main__':
-    x ,y = 1.1*torch.randn((512, 128)),2*torch.randn((512, 128)) + 1
+    x ,y = 1.1*torch.randn((512, 128)),torch.randn((512, 128)) + 1
     lb = torch.zeros((512))
     loss = SSLLoss()
     focalloss = NewFocalLoss()
