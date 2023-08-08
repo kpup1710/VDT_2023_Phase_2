@@ -81,6 +81,7 @@ def train_pretext(epochs, model, loss_func, train_dl, valid_dl, opt_fn=None, lr=
         result = evaluate(model, loss_func=loss_func, valid_dl=valid_dl, metric=metric)
         val_loss, total, val_metric = result
         if max_val_loss > val_loss:
+            max_val_loss = val_loss
             print("saving model")
             torch.save({'model_state_dict' : model.state_dict(),
                 'optim_state_dict' : opt.state_dict(),
